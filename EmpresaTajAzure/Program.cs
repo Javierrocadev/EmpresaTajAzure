@@ -1,5 +1,6 @@
 using Azure.Security.KeyVault.Secrets;
 using EmpresaTajAzure.Data;
+using EmpresaTajAzure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
@@ -7,6 +8,16 @@ using Microsoft.Extensions.Azure;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddTransient<ServiceApiTajamar>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(10));
+
+
+
+
+
+
+
 builder.Services.AddAzureClients(factory =>
 {
     factory.AddSecretClient(builder.Configuration.GetSection("KeyVault"));
@@ -68,6 +79,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.UseMvc(routes =>
 {
