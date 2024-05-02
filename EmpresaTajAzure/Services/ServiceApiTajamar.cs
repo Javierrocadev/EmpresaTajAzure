@@ -100,6 +100,8 @@ namespace EmpresaTajAzure.Services
             }
         }
 
+        //----------------------------USUARIOS---------------------------
+
         public async Task<List<UsuarioEmpresa>> GetUsuariosAsync()
         {
             string request = "api/usuarios";
@@ -128,6 +130,20 @@ namespace EmpresaTajAzure.Services
             return usuario;
         }
 
+
+        //----------------------------EMPRESAS---------------------------
+
+        public async Task<List<Empresa>> GetEmpresasAsync()
+        {
+            string request = "api/Empresas";
+            List<Empresa> empresas = await
+                this.CallApiAsync<List<Empresa>>(request);
+            return empresas;
+        }
+
+
+
+        
     }
 }
 
