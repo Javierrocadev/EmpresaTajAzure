@@ -1,9 +1,6 @@
-﻿@* @model IEnumerable<EmpresaTajAzure.Models.Empresa> *@
-
-
-@model Tuple<List<Empresa>, List<BlobModel>>
+﻿@model Tuple<List<Empresa>, List<BlobModel>>
 @using Newtonsoft.Json
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Index";
@@ -15,18 +12,13 @@
 
 }
 
-    @section Scripts{
+@section Scripts {
 
 
-        <script>
+    <script>
         $(document).ready(function () {
-            // Recuperar los datos de localStorage si existen
-            var empresasSeleccionadas = JSON.parse(sessionStorage.getItem("empresasSeleccionadas")) || [];
-
-
-            // Crear la URL con los valores seleccionados
-            var request = "/Empresas/_EmpresasSeleccionadas?" + empresasSeleccionadas.join("&");
-          
+            var request = "/Usuarios/_AlumnosSeleccionados?idEmpresa=" + 0;
+           
 
             // Enviar la solicitud AJAX
             $.ajax({
@@ -37,27 +29,13 @@
                     $("#empresasSeleccionadas").html(response);
                 }
             });
-
             $("#formElement input[type='checkbox']").on("change", function (e) {
                 var idEmpresa = $(this).val();
 
-                // Si el checkbox está marcado, agregarlo al array
-                if ($(this).is(':checked')) {
-                    empresasSeleccionadas.push("idempresa" + (empresasSeleccionadas.length + 1) + "=" + idEmpresa);
-                } else {
-                    // Si el checkbox está desmarcado, eliminarlo del array
-                    empresasSeleccionadas = empresasSeleccionadas.filter(function (item) {
-                        var itemId = item.split('=')[1];
-                        return itemId !== idEmpresa;
-                    });
-                }
-
-                // Guardar el objeto en localStorage como una cadena JSON
-                sessionStorage.setItem("empresasSeleccionadas", JSON.stringify(empresasSeleccionadas));
-
+               
                 // Crear la URL con los valores seleccionados
-                var request = "/Empresas/_EmpresasSeleccionadas?" + empresasSeleccionadas.join("&");
-                
+                var request = "/Usuarios/_AlumnosSeleccionados?idEmpresa=" + idEmpresa;
+               
 
                 // Enviar la solicitud AJAX
                 $.ajax({
@@ -73,7 +51,7 @@
 
 
 
-        </script>
+    </script>
 
 
 }
@@ -82,33 +60,12 @@
 @* <button id="botonloadcoches" class="btn btn-info">
     Load Coches Ajax
 </button> *@
-<section class="w-full flex flex-row">
+<section class="w-full flex flex-row ">
 
 
 
     <form method="post" name="empresas" id="formElement">
         <div class="w-full  flex flex-row flex-wrap gap-4 p-4">
-
-
-            <div>
-                <a asp-action="InsertarEmpresa" class="relative inline-flex items-center justify-between  peer-checked:ring-8 peer-checked:ring-green-600 peer-checked:outline-none duration-300  text-gray-500 bg-white border-2 border-gray-200 rounded-2xl cursor-pointer dark:hover:text-white-300 dark:border-gray-700 peer-checked:border-blue-600   hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                    <div class="cursor-pointer group overflow-hidden p-5 duration-1000 hover:duration-1000 relative w-64 h-64 bg-neutral-800 rounded-xl">
-                        <div class="bg-transparent group-hover:scale-150 -top-12 -left-12 absolute shadow-yellow-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-24 h-24"></div>
-                        <div class="bg-transparent group-hover:scale-150 top-44 left-14 absolute shadow-red-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-24 h-24"></div>
-                        <div class="bg-transparent group-hover:scale-150 top-24 left-56 absolute shadow-sky-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-24 h-24"></div>
-                        <div class="bg-transparent group-hover:scale-150 top-12 left-12 absolute shadow-red-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-12 h-12"></div>
-                        <div class="bg-transparent group-hover:scale-150 top-12 left-12 absolute shadow-green-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-44 h-44"></div>
-                        <div class="bg-transparent group-hover:scale-150 -top-24 -left-12 absolute shadow-sky-800 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-64 h-64"></div>
-                        <div class="bg-transparent group-hover:scale-150 top-24 left-12 absolute shadow-sky-500 shadow-inner rounded-full transition-all ease-in-out group-hover:duration-1000 duration-1000 w-4 h-4"></div>
-                        <div class="w-full h-full shadow-xl shadow-neutral-100 p-3 bg-neutral-600 opacity-50 rounded-xl flex-col gap-2 flex justify-center">
-                            <p>Nueva empresa</p>
-                        </div>
-                    </div>
-
-                </a>
-
-            </div>
-
             @foreach (var item in Model.Item1)
             {
 
@@ -133,17 +90,7 @@
                                 @*  <p class="text-neutral-300">
                             @Html.DisplayFor(modelItem => item.IdEmpresa)
                             </p> *@
-                                @* <img src="~/images/@Html.DisplayFor(modelItem => item.Imagen)" class=" " /> *@
-                               
-                                @foreach (BlobModel blob in Model.Item2)
-                                {
-
-                                    if (blob.Url == "https://storageaccounttajamarjrp.blob.core.windows.net/images/" + item.Imagen)
-                                    {
-                                        <img src="@blob.Url" />
-                                    }
-                                     
-                                }
+                                <img src="~/images/@Html.DisplayFor(modelItem => item.Imagen)" class=" " />
                             </div>
                             <span class="absolute bottom-2 left-4 text-neutral-50 font-bold text-xl italic">@Html.DisplayFor(modelItem => item.Nombre)</span>
                             <a href="@Html.DisplayFor(modelItem=>item.Linkedin)" target="_blank" class="absolute bottom-2 right-4 text-neutral-50 font-bold text-xl italic">
@@ -163,8 +110,6 @@
     </form>
 
 
-
-    
-<div id="empresasSeleccionadas" class="w-72 min-w-72 "></div>
+    <div id="empresasSeleccionadas" class="w-72 min-w-72 "></div>
 
 </section>

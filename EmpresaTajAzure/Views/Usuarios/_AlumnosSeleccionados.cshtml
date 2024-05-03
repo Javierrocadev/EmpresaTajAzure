@@ -1,0 +1,32 @@
+﻿@model List<EmpresaTajAzure.Models.UsuarioEmpresa> 
+
+@if (Model != null && Model.Any())
+{
+
+    @foreach (var usuario in Model)
+    {
+        <div class="bg-white overflow-hidden shadow rounded-lg border mt-2">
+
+            <div class="border-t border-gray-200 px-0 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                    <div class=" sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">
+                            Nombre
+                        </dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            @usuario.Nombre
+                        </dd>
+                    </div>
+
+                </dl>
+            </div>
+
+        </div>
+
+    }
+
+}
+else
+{
+    <p>No se encontraron usuarios para esta empresa.</p>
+}

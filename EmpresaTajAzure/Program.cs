@@ -1,4 +1,5 @@
 using Azure.Security.KeyVault.Secrets;
+using Azure.Storage.Blobs;
 using EmpresaTajAzure.Data;
 using EmpresaTajAzure.Services;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<ServiceApiTajamar>();
+builder.Services.AddTransient<ServiceStorageBlobs>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(10));
 
@@ -38,8 +40,12 @@ KeyVaultSecret secretKeySecret = await secretClient.GetSecretAsync(builder.Confi
 string secretKey = secretKeySecret.Value;
 
 
+// Recupera el storageAccount
+KeyVaultSecret StorageAccountSecret = await secretClient.GetSecretAsync(builder.Configuration["AzureKeys:StorageAccountSecretName"]);
+string StorageAccount = StorageAccountSecret.Value;
 
-
+BlobServiceClient blobServiceClient = new BlobServiceClient(StorageAccount);
+builder.Services.AddTransient<BlobServiceClient>(x => blobServiceClient);
 
 
 

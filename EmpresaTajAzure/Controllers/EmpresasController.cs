@@ -7,22 +7,44 @@ namespace EmpresaTajAzure.Controllers
     public class EmpresasController : Controller
     {
         private ServiceApiTajamar service;
+        private ServiceStorageBlobs serviceBlobs;
 
-        public EmpresasController(ServiceApiTajamar service)
+        public EmpresasController(ServiceApiTajamar service, ServiceStorageBlobs serviceBlobs)
         {
             this.service = service;
+            this.serviceBlobs = serviceBlobs;
         }
+
+
+        public async Task<IActionResult> EmpresasAlumnos()
+        {
+            List<Empresa> empresas = await this.service.GetEmpresasAsync();
+            List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
+            var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
+            return View(model);
+            //return View(empresas);
+        }
+
+
+
+
 
         public async Task<IActionResult> Empresas()
         {
             List<Empresa> empresas = await this.service.GetEmpresasAsync();
-            return View(empresas);
+            List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
+            var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
+            return View(model);
+            //return View(empresas);
         }
 
         public async Task<IActionResult> Index()
         {
             List<Empresa> empresas = await this.service.GetEmpresasAsync();
-            return View(empresas);
+            List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
+            var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
+            return View(model);
+            //return View(empresas);
         }
 
 
@@ -100,7 +122,7 @@ namespace EmpresaTajAzure.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertarEmpresa(string nombre, string linkedin, string imagen, int plazas, int plazasDisponibles)
+        public async Task<IActionResult> InsertarEmpresa(string nombre, string linkedin, IFormFile file, int plazas, int plazasDisponibles)
         {
             int idUsuario = int.Parse(HttpContext.Session.GetString("IDUSUARIO"));
 
@@ -108,11 +130,20 @@ namespace EmpresaTajAzure.Controllers
             empresa.IdEmpresa = 0;
             empresa.Nombre = nombre;
             empresa.Linkedin = linkedin;
-            empresa.Imagen = imagen;
+            empresa.Imagen = file.FileName;
             empresa.Plazas = plazas;
             empresa.PlazasDisponibles = plazasDisponibles;
 
             await this.service.InsertEmpresaAsync(empresa.IdEmpresa, empresa.Nombre,empresa.Linkedin, empresa.Imagen, empresa.Plazas,empresa.PlazasDisponibles);
+
+            string blobName = file.FileName;
+            using (Stream stream = file.OpenReadStream())
+            {
+                await this.serviceBlobs.UploadBlobAsync
+                    ("images", blobName, stream);
+            }
+
+
             return RedirectToAction("Index");
         }
 

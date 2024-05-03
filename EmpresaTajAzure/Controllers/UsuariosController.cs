@@ -19,12 +19,33 @@ namespace EmpresaTajAzure.Controllers
             this.context = context;
         }
 
+        public async Task<IActionResult> _AlumnosSeleccionados(int idEmpresa)
+        {
+            List<UsuarioEmpresa> usuarios = await this.service.FindUsuariosPorEmpresa(idEmpresa);
+            return PartialView("_AlumnosSeleccionados", usuarios);
+        }
+
         public async Task<IActionResult> ListaUsuarios()
         {
             List<UsuarioEmpresa> usuarios = await
                 this.service.GetUsuariosAsync();
             return View(usuarios);
         }
+
+        public async Task<IActionResult> AlumnosList()
+        {
+            List<UsuarioEmpresa> usuarios = await
+                this.service.GetUsuariosAsync();
+            return View(usuarios);
+        }
+
+        public async Task<IActionResult> _Details(int id)
+        {
+            UsuarioEmpresaConNombre usuario = await this.service.FindUsuarioNombreEmpresasAsync(id);
+            // return View(usuario);
+            return PartialView("_Details", usuario);
+        }
+
 
         public async Task<IActionResult> PerfilUsuario()
         {
@@ -92,16 +113,44 @@ namespace EmpresaTajAzure.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Registro(string email, int idClase, string nombre, string linkedin)
-        //{
+        [HttpPost]
+        public async Task<IActionResult> Registro(string email, int idClase, string nombre, string linkedin)
+        {
+            UsuarioEmpresa usuario = new UsuarioEmpresa();
+            usuario.IdUsuario = 0;
+            usuario.IdClase = idClase;
+            usuario.Nombre = nombre;
+            usuario.Role = "Admin";
+            usuario.Linkedin = linkedin;
+            usuario.Email = email;
+            usuario.Emp_1Id = null;
+            usuario.Emp_2Id = null;
+            usuario.Emp_3Id = null;
+            usuario.Emp_4Id = null;
+            usuario.Emp_5Id = null;
+            usuario.Emp_6Id = null;
+
+            await this.service.InsertusuarioAsync(usuario.IdUsuario, usuario.IdClase, usuario.Nombre, usuario.Role, usuario.Linkedin, usuario.Email, usuario.Emp_1Id, usuario.Emp_2Id, usuario.Emp_3Id, usuario.Emp_4Id, usuario.Emp_5Id, usuario.Emp_6Id);
 
 
 
 
-        //    return View();
-        //}
+            return RedirectToAction("Perfil", "Usuarios");
+        }
+        public async Task<IActionResult> InsertarEntrevistaAlumno(int idEmpresa, DateTime fechaEntrevista, string estado)
+        {
+            int idUsuario = int.Parse(HttpContext.Session.GetString("IDUSUARIO"));
 
+            EntrevistaAlumno entrevista = new EntrevistaAlumno();
+            entrevista.IdentEntrevista = 0;
+            entrevista.IdAlumno = idUsuario;
+            entrevista.IdEmpresa = idEmpresa;
+            entrevista.FechaEntrevista = fechaEntrevista;
+            entrevista.Estado = estado;
+
+            await this.service.InsertEntrevistaAsync(entrevista.IdentEntrevista, entrevista.IdAlumno, entrevista.IdEmpresa, entrevista.FechaEntrevista, entrevista.Estado);
+            return RedirectToAction("ListaEntrevistas");
+        }
 
         public async Task<IActionResult> InsertarEmpresaAlumno(int? idempresa1, int? idempresa2, int? idempresa3, int? idempresa4, int? idempresa5, int? idempresa6)
         {

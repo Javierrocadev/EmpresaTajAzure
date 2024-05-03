@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="InsertarEmpresa">
+        <form asp-action="InsertarEmpresa" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -24,11 +24,14 @@
                 <input asp-for="Linkedin" class="form-control" />
                 <span asp-validation-for="Linkedin" class="text-danger"></span>
             </div>
-            <div class="form-group">
+          @*   <div class="form-group">
                 <label asp-for="Imagen" class="control-label"></label>
                 <input asp-for="Imagen" class="form-control" />
                 <span asp-validation-for="Imagen" class="text-danger"></span>
-            </div>
+            </div> *@
+            <input type="file" name="file" class="form-control" />
+
+
             <div class="form-group">
                 <label asp-for="Plazas" class="control-label"></label>
                 <input asp-for="Plazas" class="form-control" />

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<EmpresaTajAzure.Models.UsuarioEmpresa>
+
+@using Newtonsoft.Json
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutInicio";
+
+    var session = HttpContextAccessor.HttpContext.Session;
+    var empresasSeleccionadasJson = session.GetString("usuariosSeleccionadas");
+    var empresasSeleccionadas = empresasSeleccionadasJson != null ? JsonConvert.DeserializeObject<List<string>>(empresasSeleccionadasJson) : new List<string>();
+
+}
+
+
+
+
+   @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".hidden.peer").on("change", function (e) {
+                // Deseleccionar los demás checkboxes
+                $(".hidden.peer").not(this).prop("checked", false);
+                
+                // Obtener el ID del checkbox seleccionado
+                var idUsuario = $(this).val();
+                
+                // Realizar la solicitud AJAX
+                $.ajax({
+                    url: "/Usuarios/_Details", // Ruta de la acción del controlador
+                    type: "GET",
+                    data: { id: idUsuario }, // Datos a enviar en la solicitud
+                    success: function (response) {
+                        // Manejar la respuesta aquí
+                        $("#empresasSeleccionadas").html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Manejar errores aquí
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+<h1>Alumnos</h1>
+
+@* <button id="botonloadcoches" class="btn btn-info">
+    Load Coches Ajax
+</button> *@
+<section class="w-full flex flex-row">
+
+
+
+    <form method="post" name="empresas" id="formElement">
+        <div class="w-full  flex flex-row flex-wrap gap-4 p-4">
+            @foreach (var item in Model)
+            {
+
+                var idEmpresa = item.IdUsuario.ToString();
+                var isChecked = empresasSeleccionadas != null && empresasSeleccionadas.Any(e => e.Contains($"idempresa{idEmpresa}="));
+
+
+                <div>
+                    <input type="checkbox" id="@Html.DisplayFor(modelItem => item.IdUsuario)" class="hidden peer" value="@Html.DisplayFor(modelItem => item.IdUsuario)" @(isChecked ? "checked=true" : "") />
+
+                    <label for="@Html.DisplayFor(modelItem => item.IdUsuario)" class="peer-checked:ring-8 peer-checked:ring-green-600 peer-checked:outline-none duration-300  text-gray-500 bg-white border-2 border-gray-200 rounded-2xl cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600´w-80 h-72   hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                       <div class="group before:hover:scale-95 before:hover:h-72 before:hover:w-80 before:hover:h-44 before:hover:rounded-b-2xl before:transition-all before:duration-500 before:content-[''] before:w-80 before:h-24 before:rounded-t-2xl before:bg-gradient-to-bl from-sky-200 via-orange-200 to-orange-700 before:absolute before:top-0 w-80 h-72 relative bg-slate-50 flex flex-col items-center justify-center gap-2 text-center rounded-2xl overflow-hidden">
+  <div class="w-28 h-28 bg-blue-700 mt-8 rounded-full border-4 border-slate-50 z-10 group-hover:scale-150 group-hover:-translate-x-24  group-hover:-translate-y-20 transition-all duration-500"></div>
+  <div class="z-10  group-hover:-translate-y-10 transition-all duration-500">
+                                <span class="text-2xl font-semibold">@Html.DisplayFor(modelItem => item.Nombre)</span>
+                                <p>@Html.DisplayFor(modelItem => item.Role)</p>
+  </div>
+                            @Html.ActionLink("Detalles", "Details", new { id = item.IdUsuario }, new { @class = "bg-blue-700 px-4 py-1 text-slate-50 rounded-md z-10 hover:scale-125 transition-all duration-500 hover:bg-blue-500" })
+</div>
+                                        
+                    </label>
+                </div>
+            }
+
+        </div>
+    </form>
+
+
+    <div id="empresasSeleccionadas" class="w-96 min-w-96 "></div>
+
+</section>

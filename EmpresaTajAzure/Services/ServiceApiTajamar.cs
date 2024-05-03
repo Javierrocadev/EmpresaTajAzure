@@ -112,6 +112,15 @@ namespace EmpresaTajAzure.Services
             return usuarios;
         }
 
+        public async Task<List<UsuarioEmpresa>> FindUsuariosPorEmpresa(int idEmpresa)
+        {
+            string request = "api/usuarios/usuariosporempresa/"+ idEmpresa;
+            List<UsuarioEmpresa> usuarios = await
+                this.CallApiAsync<List<UsuarioEmpresa>>(request);
+            return usuarios;
+        }
+        
+
         public async Task<UsuarioEmpresa> FindUsuarioEmailAsync
             (string email)
         {
@@ -122,7 +131,40 @@ namespace EmpresaTajAzure.Services
             return usuario;
         }
 
+        public async Task InsertusuarioAsync(int idUsuario, int? idClase, string nombre, string role, string linkedin, string email, int? emp1, int? emp2, int? emp3, int? emp4, int? emp5, int? emp6)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/usuarios";
+                client.BaseAddress = new Uri(this.UrlApiTajamar);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.Header);
+                //INSTANCIAMOS NUESTRO MODEL
+                UsuarioEmpresa usuario = new UsuarioEmpresa();
+                usuario.IdUsuario = 0;
+                usuario.IdClase = idClase;
+                usuario.Nombre = nombre;
+                usuario.Role = role;
+                usuario.Linkedin = linkedin;
+                usuario.Email = email;
+                usuario.Emp_1Id = emp1;
+                usuario.Emp_2Id = emp2;
+                usuario.Emp_3Id = emp3;
+                usuario.Emp_4Id = emp4;
+                usuario.Emp_5Id = emp5;
+                usuario.Emp_6Id = emp6;
 
+                //CONVERTIMOS NUESTRO MODEL A JSON
+                string json = JsonConvert.SerializeObject(usuario);
+                //PARA ENVIAR DATOS (data) AL SERVICIO DEBEMOS 
+                //UTILIZAR LA CLASE StringContent QUE NOS PEDIRA
+                //LOS DATOS, SU ENCODING Y EL TIPO DE FORMATO
+                StringContent content =
+                    new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PostAsync(request, content);
+            }
+        }
 
         //METODO PROTEGIDO
         //public async Task<UsuarioEmpresa> FindUsuarioAsync
