@@ -3,6 +3,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data;
 
 namespace EmpresaTajAzure.Services
 {
@@ -120,15 +122,63 @@ namespace EmpresaTajAzure.Services
             return usuario;
         }
 
+
+
         //METODO PROTEGIDO
-        public async Task<UsuarioEmpresa> FindUsuarioAsync
-            (int idUsuario, string token)
+        //public async Task<UsuarioEmpresa> FindUsuarioAsync
+        //    (int idUsuario, string token)
+        //{
+        //    string request = "api/usuarios/" + idUsuario;
+        //    UsuarioEmpresa usuario = await
+        //        this.CallApiAsync<UsuarioEmpresa>(request, token);
+        //    return usuario;
+        //}
+
+        public async Task<UsuarioEmpresa> FindUsuarioAsync(int idUsuario)
         {
             string request = "api/usuarios/" + idUsuario;
             UsuarioEmpresa usuario = await
-                this.CallApiAsync<UsuarioEmpresa>(request, token);
+                this.CallApiAsync<UsuarioEmpresa>(request);
             return usuario;
         }
+
+        public async Task<UsuarioEmpresaConNombre> FindUsuarioNombreEmpresasAsync(int idUsuario)
+        {
+            string request = "api/usuarios/perfil/" + idUsuario;
+            UsuarioEmpresaConNombre usuario = await
+                this.CallApiAsync<UsuarioEmpresaConNombre>(request);
+            return usuario;
+        }
+
+        public async Task UpdateUsuarioAsync(int idUsuario, int idClase, string nombre, string role, string linkedin, string email, int? idempresa1, int? idempresa2, int? idempresa3, int? idempresa4, int? idempresa5, int? idempresa6)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/usuarios";
+                client.BaseAddress = new Uri(this.UrlApiTajamar);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.Header);
+                UsuarioEmpresa usuario = new UsuarioEmpresa();
+                usuario.IdUsuario = idUsuario;
+                usuario.IdClase = idClase;
+                usuario.Nombre = nombre;
+                usuario.Role = role;
+                usuario.Linkedin = linkedin;
+                usuario.Email = email;
+                usuario.Emp_1Id = idempresa1;
+                usuario.Emp_2Id = idempresa2;
+                usuario.Emp_3Id = idempresa3;
+                usuario.Emp_4Id = idempresa4;
+                usuario.Emp_5Id = idempresa5;
+                usuario.Emp_6Id = idempresa6;
+                string json = JsonConvert.SerializeObject(usuario);
+                StringContent content =
+                    new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PutAsync(request, content);
+            }
+        }
+
 
 
         //----------------------------EMPRESAS---------------------------
@@ -141,9 +191,96 @@ namespace EmpresaTajAzure.Services
             return empresas;
         }
 
+        public async Task<Empresa> GetEmpresaById(int idempresa)
+        {
+            string request = "api/Empresas/" + idempresa;
+            //string request = "api/Usuarios/email/javier.roca%40tajamar365.com";
+            Empresa empresa = await
+                this.CallApiAsync<Empresa>(request);
+            return empresa;
+        }
+        public async Task InsertEmpresaAsync(int idEmpresa, string nombre, string linkedin, string imagen, int? plazas, int? plazasDisponibles)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/empresas";
+                client.BaseAddress = new Uri(this.UrlApiTajamar);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.Header);
+                //INSTANCIAMOS NUESTRO MODEL
+                Empresa empresa = new Empresa();
+                empresa.IdEmpresa = 0;
+                empresa.Nombre = nombre;
+                empresa.Linkedin = linkedin;
+                empresa.Imagen = imagen;
+                empresa.Plazas = plazas;
+                empresa.PlazasDisponibles = plazasDisponibles;
+                //CONVERTIMOS NUESTRO MODEL A JSON
+                string json = JsonConvert.SerializeObject(empresa);
+                //PARA ENVIAR DATOS (data) AL SERVICIO DEBEMOS 
+                //UTILIZAR LA CLASE StringContent QUE NOS PEDIRA
+                //LOS DATOS, SU ENCODING Y EL TIPO DE FORMATO
+                StringContent content =
+                    new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PostAsync(request, content);
+            }
+        }
+
+
+
+
+        //InsertarEmpresasEnUsuario
+
+        //----------------------------ENTREVISTAS------------------
+
+
+        public async Task<List<EntrevistaAlumno>> FindEntrevistasUsuarioAsync(int idUsuario)
+        {
+            string request = "api/Entrevistas/entrevistasPorUsuario/" + idUsuario;
+           List<EntrevistaAlumno> entrevistas = await
+                this.CallApiAsync<List<EntrevistaAlumno>>(request);
+            return entrevistas;
+        }
+
+        public async Task InsertEntrevistaAsync
+    (int identEntrevista, int idAlumno, int idEmpresa, DateTime fechaEntrevista, string estado)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/entrevistas";
+                client.BaseAddress = new Uri(this.UrlApiTajamar);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.Header);
+                //INSTANCIAMOS NUESTRO MODEL
+                EntrevistaAlumno entrevista = new EntrevistaAlumno();
+                entrevista.IdentEntrevista = identEntrevista;
+                entrevista.IdAlumno = idAlumno;
+                entrevista.IdEmpresa = idEmpresa;
+                entrevista.FechaEntrevista = fechaEntrevista;
+                entrevista.Estado = estado;
+                //CONVERTIMOS NUESTRO MODEL A JSON
+                string json = JsonConvert.SerializeObject(entrevista);
+                //PARA ENVIAR DATOS (data) AL SERVICIO DEBEMOS 
+                //UTILIZAR LA CLASE StringContent QUE NOS PEDIRA
+                //LOS DATOS, SU ENCODING Y EL TIPO DE FORMATO
+                StringContent content =
+                    new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response =
+                    await client.PostAsync(request, content);
+            }
+        }
+
+
+
+
+
+
+
 
 
         
+
     }
 }
 

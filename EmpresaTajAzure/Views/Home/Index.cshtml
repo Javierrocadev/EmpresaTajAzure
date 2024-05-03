@@ -1,8 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@{
+    Layout = "_LayoutInicio";
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<section class="text-gray-600 body-font ">
+    <div class="container px-5 gap-24 mx-auto">
+        <div class="flex flex-wrap w-full mb-12 flex-col items-center text-center">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900">
+                Gestor Prácticas empresas
+            </h1>
+        </div>
+        <div class="flex flex-wrap justify-center -m-4 mb-6">
+            <div class="xl:w-1/3 md:w-1/2  p-4">
+
+                <div class="service-card    snap-start shrink-0 py-6 px-6 bg-slate-800 text-white flex flex-col gap-8 items-between transition-all duration-300 rounded shadow-sm shadow-[#00000050] group hover:opacity-80">
+                    <div class="flex gap-2 flex-col">
+                        <h3 class="font-bold text-white text-2xl group-hover:text-slate-600 text-black/80">
+                            Log In
+                        </h3>
+                        <p class="text-white group-hover:text-blue-200 text-sm">
+                            Inicia sesión con tu correo de clase para poder acceder
+                        </p>
+                    </div>
+                    <p class="text-5xl font-bold self-end text-primary-500 group-hover:text-primary-600">
+                        1
+                    </p>
+                </div>
+
+            </div>
+            <div class="xl:w-1/3 md:w-1/2  p-4">
+
+                <div class="service-card    snap-start shrink-0 py-6 px-6 bg-slate-800 text-white flex flex-col gap-8 items-between transition-all duration-300 rounded shadow-sm shadow-[#00000050] group hover:opacity-90">
+                    <div class="flex gap-2 flex-col">
+                        <h3 class="font-bold text-white text-2xl group-hover:text-slate-600 text-black/80">
+                            Seleccionar empresa
+                        </h3>
+                        <p class="text-white group-hover:text-blue-200 text-sm">
+                            Selecciona tus empresas, entra en su linkedin y elige las que más te convezcan para realizar tus practicas
+                        </p>
+                    </div>
+                    <p class="text-5xl font-bold self-end text-primary-500 group-hover:text-primary-600">
+                        2
+                    </p>
+                </div>
+
+            </div>
+            <div class="xl:w-1/3 md:w-1/2  p-4">
+
+                <div class="service-card    snap-start shrink-0 py-6 px-6 bg-slate-800 text-white flex flex-col gap-8 items-between transition-all duration-300 rounded shadow-sm shadow-[#00000050] group hover:opacity-90">
+                    <div class="flex gap-2 flex-col">
+                        <h3 class="font-bold text-white text-2xl group-hover:text-slate-600 text-black/80">
+                            Envia tus respuesta
+                        </h3>
+                        <p class="text-white group-hover:text-blue-200 text-sm">
+                            Una vez que hayas elegido las empresas envía tus resultados.
+                        </p>
+                    </div>
+                    <p class="text-5xl font-bold self-end text-primary-500 group-hover:text-primary-600">
+                        3
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

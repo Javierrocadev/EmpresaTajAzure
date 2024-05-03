@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EmpresaTajAzure</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EmpresaTajAzure.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="flex flex-wrap border-b custom:justify-start custom:flex-nowrap w-full bg-bg-100 text-text-200 py-4 dark:bg-primary-100">
+        <nav class="max-w-screen-xl h-12 shrink-0 w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between "
+             aria-label="Global">
+            <a class="custom:order-1  text-xl inline-flex font-semibold dark:text-text-100" asp-area="" asp-controller="Home" asp-action="Index">
+
+                <img src="~/images/LogoTajamar.png" class="h-8 me-3 invert" alt="logo Tech Riders" /> Tajamar
+            </a>
+           
+            <div class="custom:order-3 flex items-center gap-x-2">
+                <button type="button"
+                        class="hs-dark-mode-active:hidden block hs-dark-mode group flex items-center text-gray-600 hover:text-blue-600 font-medium dark:text-gray-400 dark:hover:text-gray-500"
+                        data-hs-theme-click-value="dark">
+                    <svg class="flex-shrink-0 w-4 h-4"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                    </svg>
+                </button>
+                <button type="button"
+                        class="hs-dark-mode-active:block hidden hs-dark-mode group flex items-center text-gray-600 hover:text-blue-600 font-medium dark:text-gray-400 dark:hover:text-gray-500"
+                        data-hs-theme-click-value="light">
+                    <svg class="flex-shrink-0 w-4 h-4"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 8a2 2 0 1 0 4 4" />
+                        <path d="M12 2v2" />
+                        <path d="M12 20v2" />
+                        <path d="m4.93 4.93 1.41 1.41" />
+                        <path d="m17.66 17.66 1.41 1.41" />
+                        <path d="M2 12h2" />
+                        <path d="M20 12h2" />
+                        <path d="m6.34 17.66-1.41 1.41" />
+                        <path d="m19.07 4.93-1.41 1.41" />
+                    </svg>
+                </button>
+               
+                @if (Context.Session.GetString("NOMBREUSUARIO") == null)
+                {
+                    <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-bg-300 bg-bg-100 text-text-200 shadow-sm duration-300 hover:bg-bg-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:border-bg-200 dark:text-text-100 dark:hover:bg-bg-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="Registro">Registrarse</a>
+                    <a asp-controller="Usuarios" asp-action="LogOut" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-bg-300 bg-bg-100 text-text-200 shadow-sm duration-300 hover:bg-bg-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:border-bg-200 dark:text-text-100 dark:hover:bg-bg-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200">
+                        Log out
+                    </a>
+                }
+                else
+                {
+
+                    @if (Context.Session.GetString("ROLE") == "Admin" || Context.Session.GetString("ROLE") == "admin")
+                    {
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="AlumnosList">ALUMNOS</a>
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Empresas" asp-action="EmpresasAlumnos">EmpresasAl</a>
+
+                    }
+                    @if (Context.Session.GetString("ROLE") == "Alumno" || Context.Session.GetString("ROLE") == "alumno")
+                    {
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Entrevistas" asp-action="ListaEntrevistas">Entrevistas</a>
+                     
+
+                    }
+
+                    <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="Perfil">perfil claims</a>
+                    <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="PerfilUsuario">perfilUsuario</a>
+
+                    <h1>
+                        Hola, <span class="font-medium hover:text-accent-200 text-text-200 ">
+                            @Context.Session.GetString("NOMBREUSUARIO")
+                        </span>
+                    </h1>
+                    <a asp-controller="Usuarios" asp-action="LogOut" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-bg-300 bg-bg-100 text-text-200 shadow-sm duration-300 hover:bg-bg-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:border-bg-200 dark:text-text-100 dark:hover:bg-bg-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200">
+                        Log out
+                    </a>
+
+                @*     <form method="post"
+                          asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@Url.Action("Index", "Home")">
+                        <span style="color:red">
+                            @UserManager.GetUserName(User)
+                        </span>
+                        <button class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-bg-300 bg-bg-100 text-text-200 shadow-sm duration-300 hover:bg-bg-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white dark:border-bg-200 dark:text-text-100 dark:hover:bg-bg-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200">
+                            Log out
+                        </button>
+                    </form>
+ *@
+
+
+
+              
+                }
+  
+                
+
+
+
+            </div>
+            
+        </nav>
+    </header>
+    <div class="container h-screen">
+        <main role="main" class="p-3 " >
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

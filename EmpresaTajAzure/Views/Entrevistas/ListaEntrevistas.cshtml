@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EmpresaTajAzure.Models.EntrevistaAlumno>
+
+@{
+    Layout = "_LayoutInicio";
+}
+
+
+<h1>Tus Entrevistas</h1>
+
+<p>
+    <a asp-action="InsertarEntrevistaAlumno">Nueva entrevista</a>
+</p>
+<br />
+<br />
+<div class="w-full flex flex-row gap-8"> 
+@foreach (var item in Model) {
+            <div class="relative rounded-lg -skew-x-6 -translate-y-2 -translate-y-6 hover:-translate-y-1 hover:-translate-x-0 hover:skew-x-0 duration-500 w-72 h-44 p-2 bg-neutral-50 card-compact hover:bg-base-200 transition-all duration-200 [box-shadow:12px_12px] hover:[box-shadow:4px_4px]">
+                <figure class="w-full h-full">
+                    <div alt="change to a img tag"
+                         class="bg-neutral-800 text-neutral-50 min-h-full rounded-lg border border-opacity-5"></div>
+                </figure>
+                <div class="absolute text-neutral-50 bottom-4 left-0 px-4">
+            <span class="font-bold">@Html.DisplayFor(modelItem => item.Estado)</span>
+                    <p class="text-sm opacity-60 line-clamp-2">
+                @Html.DisplayFor(modelItem => item.FechaEntrevista)
+                @Html.DisplayFor(modelItem => item.IdEmpresa)
+                    </p>
+                </div>
+            </div>
+
+       @*  <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.IdentEntrevista)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdAlumno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaEntrevista)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr> *@
+}
+</div>
+</table>

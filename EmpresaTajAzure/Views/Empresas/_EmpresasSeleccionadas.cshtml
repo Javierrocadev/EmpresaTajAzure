@@ -1,0 +1,88 @@
+﻿@* @model List<Empresa>
+
+<ul>
+    @foreach (var empresa in Model)
+    {
+        <li>@empresa.Nombre</li>
+    }
+</ul>
+<p>carga</p> *@
+@using Newtonsoft.Json
+
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@model List<Empresa>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutVacio";
+
+    var session = HttpContextAccessor.HttpContext.Session;
+    var empresasSeleccionadasJson = session.GetString("empresasSeleccionadas");
+    var empresasSeleccionadas = empresasSeleccionadasJson != null ? JsonConvert.DeserializeObject<List<string>>(empresasSeleccionadasJson) : new List<string>();
+
+}
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#btnInsertarEmpresas").click(function () {
+
+                // Recuperar los datos de localStorage si existen
+                var empresasSeleccionadas = JSON.parse(sessionStorage.getItem("empresasSeleccionadas")) || [];
+                var request = "/Usuarios/InsertarEmpresaAlumno?" + empresasSeleccionadas.join("&");
+               
+
+
+                // Enviar la solicitud AJAX
+                $.ajax({
+                    url: request,
+                    type: "GET",
+                    success: function (response) {
+                       
+                    }
+                });
+             
+            });
+        });
+    </script>
+
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var empresa in Model)
+    {
+        @* <div>
+            <h2>@empresa.IdEmpresa</h2>
+            <h2>@empresa.Plazas</h2>
+            <h2>@empresa.Nombre</h2>
+            <p>cargado</p>
+        </div> *@
+        <div class=" group overflow-hidden mt-4 p-2 duration-1000 hover:duration-1000 relative w-64  bg-neutral-800 rounded-xl">
+            <div class="w-full h-full shadow-xl shadow-neutral-900 p-3 bg-neutral-600 opacity-50 rounded-xl flex-col gap-2 flex justify-center">
+                <span class="text-neutral-50 font-bold text-xl italic">@empresa.Nombre</span>
+                @* <p class="text-neutral-300">
+                    @empresa.IdEmpresa
+                </p> *@
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class=" group overflow-hidden mt-4 p-2 duration-1000 hover:duration-1000 relative w-64 h-64 bg-neutral-800 rounded-xl">
+        <div class="w-full h-full shadow-xl shadow-neutral-900 p-3 bg-neutral-600 opacity-50 rounded-xl flex-col gap-2 flex justify-center">
+            <span class="text-neutral-50 font-bold text-xl italic">Sin seleccionar</span>
+
+        </div>
+    </div>
+}
+
+@* 
+<button id="btnInsertarEmpresas" class="bg-slate-800 border-2 mt-4 border-[#3e3e3e] rounded-lg text-white px-6 py-3 text-base hover:border-[#fff] cursor-pointer transition">
+    Submit
+</button> *@
+
+<button id="btnInsertarEmpresas" class="py-2 bg-blue-600 px-3 mt-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-bg-300 bg-bg-100 text-text-200 shadow-sm duration-300 hover:bg-bg-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-600 dark:border-bg-200 dark:text-text-100 dark:hover:bg-bg-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200">
+    Seleccionar empresas
+</button>
