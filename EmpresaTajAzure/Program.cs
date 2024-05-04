@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddTransient<ServiceApiTajamar>();
 builder.Services.AddTransient<ServiceStorageBlobs>();
+//builder.Services.AddTransient<ServiceLogicApps>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(10));
 
@@ -38,6 +39,11 @@ string appId = applicationIDSecret.Value;
 // Recupera el SecretKey
 KeyVaultSecret secretKeySecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:SecretKeySecretName"]);
 string secretKey = secretKeySecret.Value;
+
+// Recupera el logic app
+KeyVaultSecret urlLogicAppSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:UrlLogicAppSecretName"]);
+string urlLogicApp = urlLogicAppSecret.Value;
+builder.Services.AddTransient<ServiceLogicApps>(s => new ServiceLogicApps(urlLogicApp));
 
 
 // Recupera el storageAccount

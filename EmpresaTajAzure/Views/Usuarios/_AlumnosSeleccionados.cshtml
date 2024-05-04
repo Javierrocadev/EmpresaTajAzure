@@ -1,4 +1,4 @@
-﻿@model List<EmpresaTajAzure.Models.UsuarioEmpresa> 
+﻿@* @model List<EmpresaTajAzure.Models.UsuarioEmpresa> 
 
 @if (Model != null && Model.Any())
 {
@@ -30,3 +30,154 @@ else
 {
     <p>No se encontraron usuarios para esta empresa.</p>
 }
+ *@
+
+@*  @model List<EmpresaTajAzure.Models.UsuarioEmpresa>
+
+@if (Model != null && Model.Any())
+{
+    <textarea class="form-control" rows="10">
+        @foreach (var usuario in Model)
+        {
+            
+            @usuario.Nombre
+            @Html.Raw(Environment.NewLine) 
+           <text>Linkedin: </text> @usuario.Linkedin
+            @Html.Raw(Environment.NewLine) 
+        }
+        </textarea>
+}
+else
+{
+    <p>No se encontraron usuarios para esta empresa.</p>
+}
+ *@
+
+@* @model Tuple<int, List<EmpresaTajAzure.Models.UsuarioEmpresa>>
+
+@{
+    int idEmpresa = Model.Item1;
+    List<EmpresaTajAzure.Models.UsuarioEmpresa> usuarios = Model.Item2;
+}
+
+@if (usuarios != null && usuarios.Any())
+{
+    <textarea class="form-control" rows="20">
+        @foreach (var i in Enumerable.Range(1, 6))
+        {
+            var usuariosEnEmp = usuarios.Where(u => GetEmpId(u, i) == idEmpresa).ToList();
+            if (usuariosEnEmp.Any())
+            {
+                <text>Opcion- @i:</text>
+                @Html.Raw(Environment.NewLine) 
+                @foreach (var usuario in usuariosEnEmp)
+                {
+                    @usuario.Nombre
+                    <text> - Linkedin: </text> @usuario.Linkedin
+                    @Html.Raw(Environment.NewLine) 
+                }
+                @Html.Raw(Environment.NewLine) 
+                <text>----------------</text>
+                @Html.Raw(Environment.NewLine) 
+            }
+        }
+        </textarea>
+}
+else
+{
+    <p>No se encontraron usuarios para esta empresa.</p>
+}
+
+
+
+
+
+
+@functions {
+    public int? GetEmpId(EmpresaTajAzure.Models.UsuarioEmpresa usuario, int index)
+    {
+        switch (index)
+        {
+            case 1: return usuario.Emp_1Id;
+            case 2: return usuario.Emp_2Id;
+            case 3: return usuario.Emp_3Id;
+            case 4: return usuario.Emp_4Id;
+            case 5: return usuario.Emp_5Id;
+            case 6: return usuario.Emp_6Id;
+            default: return null;
+        }
+    }
+} *@
+
+
+
+<form method="post" action="@Url.Action("Index", "LogicApps")">
+    <label>To: </label>
+    <input type="text" name="email" class="form-control" />
+    <label>Subject</label>
+    <input type="text" name="asunto" class="form-control" />
+    <label>Message</label>
+   
+    @model Tuple<int, List<EmpresaTajAzure.Models.UsuarioEmpresa>>
+
+    @{
+        int idEmpresa = Model.Item1;
+        List<EmpresaTajAzure.Models.UsuarioEmpresa> usuarios = Model.Item2;
+    }
+
+    @if (usuarios != null && usuarios.Any())
+    {
+        <textarea class="form-control" rows="20" name="mensaje">
+            @foreach (var i in Enumerable.Range(1, 6))
+            {
+                var usuariosEnEmp = usuarios.Where(u => GetEmpId(u, i) == idEmpresa).ToList();
+                if (usuariosEnEmp.Any())
+                {
+                    <text>Opcion- @i:</text>
+                    @Html.Raw(Environment.NewLine) 
+                    @foreach (var usuario in usuariosEnEmp)
+                    {
+                        @usuario.Nombre
+                        <text> - Linkedin: </text> @usuario.Linkedin
+                        @Html.Raw(Environment.NewLine) 
+                    }
+                    @Html.Raw(Environment.NewLine) 
+                    <text>----------------</text>
+                    @Html.Raw(Environment.NewLine) 
+                }
+            }
+            </textarea>
+    }
+    else
+    {
+        <p>No se encontraron usuarios para esta empresa.</p>
+    }
+
+
+
+
+
+
+
+    <button class="btn btn-info">
+        Send mail
+    </button>
+</form>
+<h2 style="color:red">@ViewData["MENSAJE"]</h2>
+
+
+@functions {
+    public int? GetEmpId(EmpresaTajAzure.Models.UsuarioEmpresa usuario, int index)
+    {
+        switch (index)
+        {
+            case 1: return usuario.Emp_1Id;
+            case 2: return usuario.Emp_2Id;
+            case 3: return usuario.Emp_3Id;
+            case 4: return usuario.Emp_4Id;
+            case 5: return usuario.Emp_5Id;
+            case 6: return usuario.Emp_6Id;
+            default: return null;
+        }
+    }
+    }

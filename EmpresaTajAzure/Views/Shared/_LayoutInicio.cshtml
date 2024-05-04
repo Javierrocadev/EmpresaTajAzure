@@ -75,18 +75,18 @@
                     {
                         <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="AlumnosList">ALUMNOS</a>
                         <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Empresas" asp-action="EmpresasAlumnos">EmpresasAl</a>
-
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="PerfilUsuarioAdmin">perfilUsuario</a>
                     }
                     @if (Context.Session.GetString("ROLE") == "Alumno" || Context.Session.GetString("ROLE") == "alumno")
                     {
                         <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
                         <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Entrevistas" asp-action="ListaEntrevistas">Entrevistas</a>
-                     
+                        <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="PerfilUsuario">perfilUsuario</a>
 
                     }
 
-                    <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="Perfil">perfil claims</a>
-                    <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="PerfilUsuario">perfilUsuario</a>
+@*                     <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="Perfil">perfil claims</a>
+                    <a class="font-medium hover:text-accent-200 text-text-200  dark:text-text-100 dark:hover:text-text-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-bg-200" asp-area="" asp-controller="Usuarios" asp-action="PerfilUsuario">perfilUsuario</a> *@
 
                     <h1>
                         Hola, <span class="font-medium hover:text-accent-200 text-text-200 ">

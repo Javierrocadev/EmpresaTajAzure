@@ -19,11 +19,21 @@ namespace EmpresaTajAzure.Controllers
             this.context = context;
         }
 
+        //public async Task<IActionResult> _AlumnosSeleccionados(int idEmpresa)
+        //{
+        //    List<UsuarioEmpresa> usuarios = await this.service.FindUsuariosPorEmpresa(idEmpresa);
+        //    return PartialView("_AlumnosSeleccionados", usuarios);
+        //}
+
         public async Task<IActionResult> _AlumnosSeleccionados(int idEmpresa)
         {
             List<UsuarioEmpresa> usuarios = await this.service.FindUsuariosPorEmpresa(idEmpresa);
-            return PartialView("_AlumnosSeleccionados", usuarios);
+            var tuple = new Tuple<int, List<UsuarioEmpresa>>(idEmpresa, usuarios);
+            return PartialView("_AlumnosSeleccionados", tuple);
         }
+
+
+
 
         public async Task<IActionResult> ListaUsuarios()
         {
@@ -56,6 +66,17 @@ namespace EmpresaTajAzure.Controllers
                       
             return View(usuario);
         }
+
+        public async Task<IActionResult> PerfilUsuarioAdmin()
+        {
+            int idUsuario = int.Parse(HttpContext.Session.GetString("IDUSUARIO"));
+
+            UsuarioEmpresa usuario = await this.service.FindUsuarioAsync(idUsuario);
+
+
+            return View(usuario);
+        }
+
 
 
         [Authorize]
@@ -133,9 +154,7 @@ namespace EmpresaTajAzure.Controllers
             await this.service.InsertusuarioAsync(usuario.IdUsuario, usuario.IdClase, usuario.Nombre, usuario.Role, usuario.Linkedin, usuario.Email, usuario.Emp_1Id, usuario.Emp_2Id, usuario.Emp_3Id, usuario.Emp_4Id, usuario.Emp_5Id, usuario.Emp_6Id);
 
 
-
-
-            return RedirectToAction("Perfil", "Usuarios");
+            return RedirectToAction("PerfilUsuario", "Usuarios");
         }
         public async Task<IActionResult> InsertarEntrevistaAlumno(int idEmpresa, DateTime fechaEntrevista, string estado)
         {
