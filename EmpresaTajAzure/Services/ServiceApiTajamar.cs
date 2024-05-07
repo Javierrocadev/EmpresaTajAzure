@@ -104,11 +104,11 @@ namespace EmpresaTajAzure.Services
 
         //----------------------------USUARIOS---------------------------
 
-        public async Task<List<UsuarioEmpresa>> GetUsuariosAsync()
+        public async Task<List<UsuarioEmpresa>> GetUsuariosAsync(string token)
         {
             string request = "api/usuarios";
             List<UsuarioEmpresa> usuarios = await
-                this.CallApiAsync<List<UsuarioEmpresa>>(request);
+                this.CallApiAsync<List<UsuarioEmpresa>>(request, token);
             return usuarios;
         }
 
@@ -225,13 +225,31 @@ namespace EmpresaTajAzure.Services
 
         //----------------------------EMPRESAS---------------------------
 
-        public async Task<List<Empresa>> GetEmpresasAsync()
+        //public async Task<List<Empresa>> GetEmpresasAsync()
+        //{
+        //    string request = "api/Empresas";
+        //    List<Empresa> empresas = await
+        //        this.CallApiAsync<List<Empresa>>(request);
+        //    return empresas;
+        //}
+
+
+        public async Task<List<Empresa>> GetEmpresasAsync(string token)
         {
             string request = "api/Empresas";
             List<Empresa> empresas = await
-                this.CallApiAsync<List<Empresa>>(request);
+                this.CallApiAsync<List<Empresa>>(request, token);
             return empresas;
         }
+        //METODO PROTEGIDO
+        //public async Task<UsuarioEmpresa> FindUsuarioAsync
+        //    (int idUsuario, string token)
+        //{
+        //    string request = "api/usuarios/" + idUsuario;
+        //    UsuarioEmpresa usuario = await
+        //        this.CallApiAsync<UsuarioEmpresa>(request, token);
+        //    return usuario;
+        //}
 
         public async Task<Empresa> GetEmpresaById(int idempresa)
         {

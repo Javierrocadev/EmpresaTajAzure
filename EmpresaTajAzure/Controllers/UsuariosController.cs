@@ -37,15 +37,17 @@ namespace EmpresaTajAzure.Controllers
 
         public async Task<IActionResult> ListaUsuarios()
         {
+            string token = HttpContext.Session.GetString("TOKEN");
             List<UsuarioEmpresa> usuarios = await
-                this.service.GetUsuariosAsync();
+                this.service.GetUsuariosAsync(token);
             return View(usuarios);
         }
 
         public async Task<IActionResult> AlumnosList()
         {
+            string token = HttpContext.Session.GetString("TOKEN");
             List<UsuarioEmpresa> usuarios = await
-                this.service.GetUsuariosAsync();
+                this.service.GetUsuariosAsync(token);
             return View(usuarios);
         }
 
@@ -153,8 +155,9 @@ namespace EmpresaTajAzure.Controllers
 
             await this.service.InsertusuarioAsync(usuario.IdUsuario, usuario.IdClase, usuario.Nombre, usuario.Role, usuario.Linkedin, usuario.Email, usuario.Emp_1Id, usuario.Emp_2Id, usuario.Emp_3Id, usuario.Emp_4Id, usuario.Emp_5Id, usuario.Emp_6Id);
 
+            
 
-            return RedirectToAction("PerfilUsuario", "Usuarios");
+            return RedirectToAction("Registro", "Usuarios");
         }
         public async Task<IActionResult> InsertarEntrevistaAlumno(int idEmpresa, DateTime fechaEntrevista, string estado)
         {

@@ -18,7 +18,8 @@ namespace EmpresaTajAzure.Controllers
 
         public async Task<IActionResult> EmpresasAlumnos()
         {
-            List<Empresa> empresas = await this.service.GetEmpresasAsync();
+            string token = HttpContext.Session.GetString("TOKEN");
+            List<Empresa> empresas = await this.service.GetEmpresasAsync(token);
             List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
             var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
             return View(model);
@@ -31,7 +32,8 @@ namespace EmpresaTajAzure.Controllers
 
         public async Task<IActionResult> Empresas()
         {
-            List<Empresa> empresas = await this.service.GetEmpresasAsync();
+            string token = HttpContext.Session.GetString("TOKEN");
+            List<Empresa> empresas = await this.service.GetEmpresasAsync(token);
             List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
             var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
             return View(model);
@@ -40,7 +42,8 @@ namespace EmpresaTajAzure.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Empresa> empresas = await this.service.GetEmpresasAsync();
+            string token = HttpContext.Session.GetString("TOKEN");
+            List<Empresa> empresas = await this.service.GetEmpresasAsync(token);
             List<BlobModel> blobs = await this.serviceBlobs.GetBlobsAsync("images");
             var model = new Tuple<List<Empresa>, List<BlobModel>>(empresas, blobs);
             return View(model);
