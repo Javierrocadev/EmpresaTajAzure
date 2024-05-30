@@ -31,7 +31,21 @@ builder.Services.AddAzureClients(factory =>
 SecretClient secretClient = builder.Services.BuildServiceProvider().GetService<SecretClient>();
 //KeyVaultSecret secret = await secretClient.GetSecretAsync("SqlLocal");
 //string connectionString = secret.Value;
+
+
+
+
+
+
 string connectionString =builder.Configuration.GetConnectionString("SqlLocal");
+
+
+
+
+
+
+
+
 // Recupera el ApplicationID
 KeyVaultSecret applicationIDSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:ApplicationIDSecretName"]);
 string appId = applicationIDSecret.Value;
@@ -55,8 +69,27 @@ builder.Services.AddTransient<BlobServiceClient>(x => blobServiceClient);
 
 
 
+//builder.Services.AddDbContext<ApplicationContext>
+//    (options => options.UseSqlServer(connectionString));
+
+
+
+
 builder.Services.AddDbContext<ApplicationContext>
-    (options => options.UseSqlServer(connectionString));
+    (options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+
+
+
+
+
+
+
+
+
+
+
+
 //INDICAMOS QUE UTILIZAREMOS UN USUARIO IdentityUser
 //DENTRO DE NUESTRA APP Y QUE LO ADMINISTRARA NUESTRO CONTEXT
 builder.Services.AddDefaultIdentity<IdentityUser>()
