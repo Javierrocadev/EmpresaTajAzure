@@ -134,8 +134,8 @@
                             @Html.DisplayFor(modelItem => item.IdEmpresa)
                             </p> *@
                                 @* <img src="~/images/@Html.DisplayFor(modelItem => item.Imagen)" class=" " /> *@
-                               
-                                @foreach (BlobModel blob in Model.Item2)
+                                <img src="https://buckettajamaraws.s3.amazonaws.com/@item.Imagen" />
+                               @*  @foreach (BlobModel blob in Model.Item2)
                                 {
 
                                     if (blob.Url == "https://storageaccounttajamarjrp.blob.core.windows.net/images/" + item.Imagen)
@@ -143,7 +143,7 @@
                                         <img src="@blob.Url" />
                                     }
                                      
-                                }
+                                } *@
                             </div>
                             <span class="absolute bottom-2 left-4 text-neutral-50 font-bold text-xl italic">@Html.DisplayFor(modelItem => item.Nombre)</span>
                             <a href="@Html.DisplayFor(modelItem=>item.Linkedin)" target="_blank" class="absolute bottom-2 right-4 text-neutral-50 font-bold text-xl italic">
