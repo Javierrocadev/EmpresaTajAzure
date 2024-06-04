@@ -1,14 +1,22 @@
+using EmpresaTajAzure.Models;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Storage.Blobs;
 using EmpresaTajAzure.Data;
+using EmpresaTajAzure.Helpers;
 using EmpresaTajAzure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+string jsonSecrets = await HelperSecretManager.GetSecretsAsync();
+KeysModel keysModel = JsonConvert.DeserializeObject<KeysModel>(jsonSecrets);
+builder.Services.AddSingleton<KeysModel>(x => keysModel);
+
 builder.Services.AddTransient<ServiceApiTajamar>();
 builder.Services.AddTransient<ServiceStorageBlobs>();
 //builder.Services.AddTransient<ServiceLogicApps>();
@@ -37,32 +45,37 @@ SecretClient secretClient = builder.Services.BuildServiceProvider().GetService<S
 
 
 
-string connectionString =builder.Configuration.GetConnectionString("SqlLocal");
-
-
-
+string connectionString = keysModel.MySql;
 
 
 
 
 
 // Recupera el ApplicationID
-KeyVaultSecret applicationIDSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:ApplicationIDSecretName"]);
-string appId = applicationIDSecret.Value;
+//KeyVaultSecret applicationIDSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:ApplicationIDSecretName"]);
+//ApplicationIDSecretName
+//string appId = applicationIDSecret.Value;
+string appId = keysModel.ApplicationIDSecretName;
 
 // Recupera el SecretKey
-KeyVaultSecret secretKeySecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:SecretKeySecretName"]);
-string secretKey = secretKeySecret.Value;
+//KeyVaultSecret secretKeySecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:SecretKeySecretName"]);
+//string secretKey = secretKeySecret.Value;
+string secretKey = keysModel.SecretKeySecretName;
 
 // Recupera el logic app
-KeyVaultSecret urlLogicAppSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:UrlLogicAppSecretName"]);
-string urlLogicApp = urlLogicAppSecret.Value;
+//KeyVaultSecret urlLogicAppSecret = await secretClient.GetSecretAsync(builder.Configuration["KeyVault:UrlLogicAppSecretName"]);
+//string urlLogicApp = urlLogicAppSecret.Value;
+string urlLogicApp = keysModel.UrlLogicAppSecretName;
 builder.Services.AddTransient<ServiceLogicApps>(s => new ServiceLogicApps(urlLogicApp));
 
 
+
+
+
 // Recupera el storageAccount
-KeyVaultSecret StorageAccountSecret = await secretClient.GetSecretAsync(builder.Configuration["AzureKeys:StorageAccountSecretName"]);
-string StorageAccount = StorageAccountSecret.Value;
+//KeyVaultSecret StorageAccountSecret = await secretClient.GetSecretAsync(builder.Configuration["AzureKeys:StorageAccountSecretName"]);
+//string StorageAccount = StorageAccountSecret.Value;
+string StorageAccount = keysModel.StorageAccountSecretName;
 
 BlobServiceClient blobServiceClient = new BlobServiceClient(StorageAccount);
 builder.Services.AddTransient<BlobServiceClient>(x => blobServiceClient);
